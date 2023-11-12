@@ -23,6 +23,7 @@ public class CreditInfoDto {//마이페이지 credit 정보
     public static CreditInfoDto from(Credit credit){
         return CreditInfoDto.builder()
                 .existing_credit_score(credit.getExisting_credit_score())
+                .yearly_income(credit.getYearly_income())
                 .company_month(credit.getCompany_month())
                 .loan_cnt(credit.getLoan_cnt())
                 .loan_amount(credit.getLoan_amount())
