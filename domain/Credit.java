@@ -52,13 +52,13 @@ public class Credit {
 
     //TODO: 범주형변수_ 수입유형, 고용유형, 자가소유유형
 //role 설정.. 근데 member와 일치할까?
-    @OneToMany(mappedBy = "credit")
-    private List<Authority> roles = new ArrayList<>();
+//    @OneToMany(mappedBy = "credit")
+//    private List<Authority> roles = new ArrayList<>();
 
-    public void setRoles(List<Authority> roles){
-        this.roles=roles;
-        roles.forEach(authority -> authority.setCredit(this));
-    }
+//    public void setRoles(List<Authority> roles){
+//        this.roles=roles;
+//        roles.forEach(authority -> authority.setCredit(this));
+//    }
     public static Credit from(CreditCreateRequestDto creditDto){
         return Credit.builder()
                 .existing_credit_score(creditDto.getExisting_credit_score())
@@ -66,6 +66,7 @@ public class Credit {
                 .company_month(creditDto.getCompany_month())
                 .loan_cnt(creditDto.getLoan_cnt())
                 .loan_amount(creditDto.getLoan_amount())
+                .debt_rate(creditDto.getDebt_rate())
                 .build();
     }
 }
