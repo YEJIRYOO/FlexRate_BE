@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.sbb.flexrate.domain.Credit;
+import com.sbb.flexrate.domain.Loan;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +25,9 @@ public class Member {
 
     @OneToOne(mappedBy ="member",cascade = CascadeType.ALL) //변경사항 모두 반영
     private Credit credit;
+
+    @OneToOne(mappedBy = "member",cascade = CascadeType.ALL)
+    private Loan loan;
 
     @Column(unique = true)
     private String account; //토큰 Service 통해 자동 발급
@@ -54,7 +58,6 @@ public class Member {
     public void setRoles(List<Authority> role){
         this.roles=role;
         role.forEach(o -> o.setMember(this));
-//        credit.setRoles(role);
         //Authority 엔터티 순회하며 setMember 메서드 호출
     }
 }
