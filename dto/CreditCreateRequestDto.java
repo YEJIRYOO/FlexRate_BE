@@ -19,7 +19,7 @@ credit생성( DTO
 @NoArgsConstructor
 @Builder
 public class CreditCreateRequestDto{
-    private Member member;//멤버를 새로 생성해버리네 미친
+    private Member member;
     private Long existing_credit_score;
     private Long yearly_income;
     private Long company_month;

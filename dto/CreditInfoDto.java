@@ -20,7 +20,7 @@ public class CreditInfoDto {//마이페이지 credit 정보
     private Long loan_amount;//이미 대출하고 있는 금액
     private Double debt_rate;//부채비율
 
-    public static CreditInfoDto from(Credit credit){
+    public static CreditInfoDto from(Credit credit){//객체 생성해서 return
         return CreditInfoDto.builder()
                 .existing_credit_score(credit.getExisting_credit_score())
                 .yearly_income(credit.getYearly_income())
