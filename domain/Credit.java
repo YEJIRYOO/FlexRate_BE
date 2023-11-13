@@ -27,11 +27,6 @@ public class Credit {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    //credit과 loan 일대일관계
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "loan_id")
-    private Loan loan;
-
     @Column(name="credit_score")
     private Long existing_credit_score;//사용자 기존 신용 점수
 
@@ -51,14 +46,6 @@ public class Credit {
     private Double debt_rate;//부채비율
 
     //TODO: 범주형변수_ 수입유형, 고용유형, 자가소유유형
-//role 설정.. 근데 member와 일치할까?
-//    @OneToMany(mappedBy = "credit")
-//    private List<Authority> roles = new ArrayList<>();
-
-//    public void setRoles(List<Authority> roles){
-//        this.roles=roles;
-//        roles.forEach(authority -> authority.setCredit(this));
-//    }
     public static Credit from(CreditCreateRequestDto creditDto){
         return Credit.builder()
                 .existing_credit_score(creditDto.getExisting_credit_score())
