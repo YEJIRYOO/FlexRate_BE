@@ -61,7 +61,6 @@ public class CreditService {
             Optional<Credit> optionalCredit=creditRepository.findByMemberId(memberId);
             if(optionalCredit.isPresent()){
                 Credit credit=optionalCredit.get();
-//                credit.setRoles(creditDto.getMember().getRoles());//멤버와 동일한 권한 부여
                 credit.setExisting_credit_score(creditDto.getExisting_credit_score());
                 credit.setYearly_income(creditDto.getYearly_income());
                 credit.setCompany_month(creditDto.getCompany_month());
@@ -71,10 +70,10 @@ public class CreditService {
                 creditRepository.save(credit);
             }else {//member의 credit조회 실패
                 System.out.println(memberId);
-                throw new DataNotFoundException("Credit not found for this member");
+                throw new DataNotFoundException("해당 Member의 Credit 조회 실패");
             }
         }else {//member조회 실패
-            throw new DataNotFoundException("Member not found");
+            throw new DataNotFoundException("Member 조회 실패");
         }
     }
 
@@ -83,6 +82,6 @@ public class CreditService {
         if(member.isPresent()){
             Credit credit=member.get().getCredit();;
             return CreditInfoDto.from(credit);
-        }else throw new DataNotFoundException("Member not found");
+        }else throw new DataNotFoundException("Member 조회 실패");
     }
 }

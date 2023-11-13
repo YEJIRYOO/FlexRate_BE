@@ -4,6 +4,7 @@ import com.sbb.flexrate.domain.Credit;
 import com.sbb.flexrate.domain.Loan;
 import com.sbb.flexrate.dto.CreditCreateRequestDto;
 import com.sbb.flexrate.dto.LoanCreateRequestDto;
+import com.sbb.flexrate.dto.LoanInfoDto;
 import com.sbb.flexrate.exception.DataNotFoundException;
 import com.sbb.flexrate.member.Member;
 import com.sbb.flexrate.member.MemberRepository;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @Transactional
 public class LoanService {
     private final LoanRepository loanRepository;
-    private final CreditRepository creditRepository;
+    private final MemberRepository memberRepository;
 
     /*
     //memberId로 해당 member의 credit 정보 반환
@@ -34,37 +35,38 @@ public class LoanService {
     }
     */
 
-    public Loan findMyLoan(Long creditId){
-        Optional<Credit>credit=creditRepository.findById(creditId);
-        if(credit.isPresent()){
-            return credit.get().getLoan();
-        }
-        else throw new DataNotFoundException("Credit not found");
-    }
-    //loan 수정_repo저장
-    public void updateLoan(Long creditId, LoanCreateRequestDto loanDto){
-        Optional<Credit> credit=creditRepository.findById(creditId);
-//        Optional<Member> member=memberRepository.findById(memberId);
-        if(credit.isPresent()){
-            Loan loan=credit.get().getLoan();
-            if(loan!=null){
-                loan.setBirth_year(loanDto.getBirth_year());
-                loan.setGender(loanDto.getGender());
+    public void updateLoan(Long memberId,LoanCreateRequestDto loanDto){
+        Optional<Member> member=memberRepository.findById(memberId);
+        if(member.isPresent()){
+            Optional<Loan> optionalLoan=loanRepository.findByMemberId(memberId);
+            if(optionalLoan.isPresent()){
+                Loan loan=optionalLoan.get();
+//                loan.setBirth_year(loanDto.getBirth_year()); 성별 생일은 member 고정-> 업데이트 항목에서 제외
+//                loan.setGender(loanDto.getGender());
                 loan.setYearly_income(loanDto.getYearly_income());
                 loan.setLoan_cnt(loanDto.getLoan_cnt());
                 loan.setLoan_amount(loanDto.getLoan_amount());
+                loan.setCredit_score(loanDto.getCredit_score());
                 loan.setPersonal_rehabilitation_yn(loanDto.getPersonal_rehabilitation_yn());
                 loan.setPersonal_rehabilitation_complete_yn(loanDto.getPersonal_rehabilitation_complete_yn());
                 loan.setCompany_year(loanDto.getCompany_year());
-                loan.setKorea_interest_rate(loanDto.getKorea_interest_rate());
-                loan.setIndex_pc(loanDto.getIndex_pc());
+//                loan.setKorea_interest_rate(loanDto.getKorea_interest_rate()); 상수들 고정값-> 업데이트 제외
+//                loan.setIndex_pc(loanDto.getIndex_pc());
                 loanRepository.save(loan);
             }else {
-                throw new DataNotFoundException("Loan not found for this member");
+                System.out.println(memberId);
+                throw new DataNotFoundException("해당 Member의 Loan 조회 실패");
             }
-        }else {
-            throw new DataNotFoundException("Credit not found");
+        }else{
+            throw new DataNotFoundException("Member 조회 실패");
         }
     }
 
+    public LoanInfoDto getLoanInfo(Long memberId){
+        Optional<Member> member=memberRepository.findById(memberId);
+        if(member.isPresent()){
+            Loan loan=member.get().getLoan();
+            return LoanInfoDto.from(loan);
+        }else throw new DataNotFoundException("Member 조회 실패");
+    }
 }
